@@ -41,6 +41,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   }),
 
   shellComponent: RootDocument,
+  notFoundComponent: NotFound,
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
@@ -67,5 +68,24 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <Scripts />
       </body>
     </html>
+  )
+}
+
+function NotFound() {
+  return (
+    <div className="mx-auto flex min-h-[60vh] w-full max-w-4xl flex-col items-center justify-center gap-4 px-6 text-center">
+      <p className="text-xs uppercase tracking-[0.3em] text-slate-500">
+        Page not found
+      </p>
+      <h1 className="font-display text-3xl text-slate-900">
+        This route does not exist yet.
+      </h1>
+      <a
+        href="/"
+        className="rounded-full border border-slate-200 bg-white px-5 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-50"
+      >
+        Back to home
+      </a>
+    </div>
   )
 }

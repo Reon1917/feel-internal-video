@@ -29,8 +29,8 @@ export * from "./enums.ts"
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Todos
- * const todos = await prisma.todo.findMany()
+ * // Fetch zero or more AllowedUsers
+ * const allowedUsers = await prisma.allowedUser.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -39,6 +39,21 @@ export const PrismaClient = $Class.getPrismaClientClass()
 export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts extends Prisma.PrismaClientOptions["omit"] = Prisma.PrismaClientOptions["omit"], ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = $Class.PrismaClient<LogOpts, OmitOpts, ExtArgs>
 export { Prisma }
 
+/**
+ * Model AllowedUser
+ * 
+ */
+export type AllowedUser = Prisma.AllowedUserModel
+/**
+ * Model Profile
+ * 
+ */
+export type Profile = Prisma.ProfileModel
+/**
+ * Model Video
+ * 
+ */
+export type Video = Prisma.VideoModel
 /**
  * Model Todo
  * 

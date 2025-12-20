@@ -8,5 +8,8 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/AllowedUser.ts'
+export type * from './models/Profile.ts'
+export type * from './models/Video.ts'
 export type * from './models/Todo.ts'
 export type * from './commonInputTypes.ts'

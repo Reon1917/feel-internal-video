@@ -51,6 +51,9 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  AllowedUser: 'AllowedUser',
+  Profile: 'Profile',
+  Video: 'Video',
   Todo: 'Todo'
 } as const
 
@@ -68,6 +71,38 @@ export const TransactionIsolationLevel = {
 } as const
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+export const AllowedUserScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  role: 'role',
+  createdAt: 'createdAt'
+} as const
+
+export type AllowedUserScalarFieldEnum = (typeof AllowedUserScalarFieldEnum)[keyof typeof AllowedUserScalarFieldEnum]
+
+
+export const ProfileScalarFieldEnum = {
+  userId: 'userId',
+  email: 'email',
+  role: 'role',
+  createdAt: 'createdAt'
+} as const
+
+export type ProfileScalarFieldEnum = (typeof ProfileScalarFieldEnum)[keyof typeof ProfileScalarFieldEnum]
+
+
+export const VideoScalarFieldEnum = {
+  id: 'id',
+  bunnyVideoId: 'bunnyVideoId',
+  title: 'title',
+  category: 'category',
+  createdAt: 'createdAt',
+  uploadedBy: 'uploadedBy'
+} as const
+
+export type VideoScalarFieldEnum = (typeof VideoScalarFieldEnum)[keyof typeof VideoScalarFieldEnum]
 
 
 export const TodoScalarFieldEnum = {

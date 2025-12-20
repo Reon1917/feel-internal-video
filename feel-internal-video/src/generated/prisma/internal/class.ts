@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.2.0",
   "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Todo {\n  id        Int      @id @default(autoincrement())\n  title     String\n  createdAt DateTime @default(now())\n}\n",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nenum Role {\n  admin\n  staff\n}\n\nmodel AllowedUser {\n  id        String   @id @default(uuid()) @db.Uuid\n  email     String   @unique\n  role      Role     @default(staff)\n  createdAt DateTime @default(now()) @map(\"created_at\")\n\n  @@map(\"allowed_users\")\n}\n\nmodel Profile {\n  userId    String   @id @map(\"user_id\") @db.Uuid\n  email     String\n  role      Role     @default(staff)\n  createdAt DateTime @default(now()) @map(\"created_at\")\n\n  @@map(\"profiles\")\n}\n\nmodel Video {\n  id           String   @id @default(uuid()) @db.Uuid\n  bunnyVideoId String   @map(\"bunny_video_id\")\n  title        String\n  category     String\n  createdAt    DateTime @default(now()) @map(\"created_at\")\n  uploadedBy   String   @map(\"uploaded_by\") @db.Uuid\n\n  @@index([category])\n  @@index([createdAt])\n  @@map(\"videos\")\n}\n\nmodel Todo {\n  id        Int      @id @default(autoincrement())\n  title     String\n  createdAt DateTime @default(now())\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Todo\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"AllowedUser\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"}],\"dbName\":\"allowed_users\"},\"Profile\":{\"fields\":[{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"user_id\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"}],\"dbName\":\"profiles\"},\"Video\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"bunnyVideoId\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"bunny_video_id\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"category\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"uploadedBy\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"uploaded_by\"}],\"dbName\":\"videos\"},\"Todo\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -58,8 +58,8 @@ export interface PrismaClientConstructor {
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Todos
-   * const todos = await prisma.todo.findMany()
+   * // Fetch zero or more AllowedUsers
+   * const allowedUsers = await prisma.allowedUser.findMany()
    * ```
    * 
    * Read more in our [docs](https://pris.ly/d/client).
@@ -80,8 +80,8 @@ export interface PrismaClientConstructor {
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Todos
- * const todos = await prisma.todo.findMany()
+ * // Fetch zero or more AllowedUsers
+ * const allowedUsers = await prisma.allowedUser.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -175,6 +175,36 @@ export interface PrismaClient<
   }>>
 
       /**
+   * `prisma.allowedUser`: Exposes CRUD operations for the **AllowedUser** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AllowedUsers
+    * const allowedUsers = await prisma.allowedUser.findMany()
+    * ```
+    */
+  get allowedUser(): Prisma.AllowedUserDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.profile`: Exposes CRUD operations for the **Profile** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Profiles
+    * const profiles = await prisma.profile.findMany()
+    * ```
+    */
+  get profile(): Prisma.ProfileDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.video`: Exposes CRUD operations for the **Video** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Videos
+    * const videos = await prisma.video.findMany()
+    * ```
+    */
+  get video(): Prisma.VideoDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
    * `prisma.todo`: Exposes CRUD operations for the **Todo** model.
     * Example usage:
     * ```ts

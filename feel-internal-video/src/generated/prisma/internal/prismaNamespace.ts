@@ -384,6 +384,9 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
+  AllowedUser: 'AllowedUser',
+  Profile: 'Profile',
+  Video: 'Video',
   Todo: 'Todo'
 } as const
 
@@ -400,10 +403,232 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "todo"
+    modelProps: "allowedUser" | "profile" | "video" | "todo"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
+    AllowedUser: {
+      payload: Prisma.$AllowedUserPayload<ExtArgs>
+      fields: Prisma.AllowedUserFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AllowedUserFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AllowedUserPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AllowedUserFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AllowedUserPayload>
+        }
+        findFirst: {
+          args: Prisma.AllowedUserFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AllowedUserPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AllowedUserFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AllowedUserPayload>
+        }
+        findMany: {
+          args: Prisma.AllowedUserFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AllowedUserPayload>[]
+        }
+        create: {
+          args: Prisma.AllowedUserCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AllowedUserPayload>
+        }
+        createMany: {
+          args: Prisma.AllowedUserCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AllowedUserCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AllowedUserPayload>[]
+        }
+        delete: {
+          args: Prisma.AllowedUserDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AllowedUserPayload>
+        }
+        update: {
+          args: Prisma.AllowedUserUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AllowedUserPayload>
+        }
+        deleteMany: {
+          args: Prisma.AllowedUserDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AllowedUserUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AllowedUserUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AllowedUserPayload>[]
+        }
+        upsert: {
+          args: Prisma.AllowedUserUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AllowedUserPayload>
+        }
+        aggregate: {
+          args: Prisma.AllowedUserAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAllowedUser>
+        }
+        groupBy: {
+          args: Prisma.AllowedUserGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AllowedUserGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AllowedUserCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AllowedUserCountAggregateOutputType> | number
+        }
+      }
+    }
+    Profile: {
+      payload: Prisma.$ProfilePayload<ExtArgs>
+      fields: Prisma.ProfileFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProfileFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfilePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProfileFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfilePayload>
+        }
+        findFirst: {
+          args: Prisma.ProfileFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfilePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProfileFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfilePayload>
+        }
+        findMany: {
+          args: Prisma.ProfileFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfilePayload>[]
+        }
+        create: {
+          args: Prisma.ProfileCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfilePayload>
+        }
+        createMany: {
+          args: Prisma.ProfileCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProfileCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfilePayload>[]
+        }
+        delete: {
+          args: Prisma.ProfileDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfilePayload>
+        }
+        update: {
+          args: Prisma.ProfileUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfilePayload>
+        }
+        deleteMany: {
+          args: Prisma.ProfileDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProfileUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProfileUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfilePayload>[]
+        }
+        upsert: {
+          args: Prisma.ProfileUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProfilePayload>
+        }
+        aggregate: {
+          args: Prisma.ProfileAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProfile>
+        }
+        groupBy: {
+          args: Prisma.ProfileGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProfileGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProfileCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProfileCountAggregateOutputType> | number
+        }
+      }
+    }
+    Video: {
+      payload: Prisma.$VideoPayload<ExtArgs>
+      fields: Prisma.VideoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.VideoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.VideoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>
+        }
+        findFirst: {
+          args: Prisma.VideoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.VideoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>
+        }
+        findMany: {
+          args: Prisma.VideoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>[]
+        }
+        create: {
+          args: Prisma.VideoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>
+        }
+        createMany: {
+          args: Prisma.VideoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.VideoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>[]
+        }
+        delete: {
+          args: Prisma.VideoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>
+        }
+        update: {
+          args: Prisma.VideoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>
+        }
+        deleteMany: {
+          args: Prisma.VideoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.VideoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.VideoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>[]
+        }
+        upsert: {
+          args: Prisma.VideoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$VideoPayload>
+        }
+        aggregate: {
+          args: Prisma.VideoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateVideo>
+        }
+        groupBy: {
+          args: Prisma.VideoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VideoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.VideoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.VideoCountAggregateOutputType> | number
+        }
+      }
+    }
     Todo: {
       payload: Prisma.$TodoPayload<ExtArgs>
       fields: Prisma.TodoFieldRefs
@@ -517,6 +742,38 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const AllowedUserScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  role: 'role',
+  createdAt: 'createdAt'
+} as const
+
+export type AllowedUserScalarFieldEnum = (typeof AllowedUserScalarFieldEnum)[keyof typeof AllowedUserScalarFieldEnum]
+
+
+export const ProfileScalarFieldEnum = {
+  userId: 'userId',
+  email: 'email',
+  role: 'role',
+  createdAt: 'createdAt'
+} as const
+
+export type ProfileScalarFieldEnum = (typeof ProfileScalarFieldEnum)[keyof typeof ProfileScalarFieldEnum]
+
+
+export const VideoScalarFieldEnum = {
+  id: 'id',
+  bunnyVideoId: 'bunnyVideoId',
+  title: 'title',
+  category: 'category',
+  createdAt: 'createdAt',
+  uploadedBy: 'uploadedBy'
+} as const
+
+export type VideoScalarFieldEnum = (typeof VideoScalarFieldEnum)[keyof typeof VideoScalarFieldEnum]
+
+
 export const TodoScalarFieldEnum = {
   id: 'id',
   title: 'title',
@@ -549,20 +806,6 @@ export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
 /**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-/**
  * Reference to a field of type 'String'
  */
 export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
@@ -577,6 +820,20 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
+ * Reference to a field of type 'Role'
+ */
+export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
+    
+
+
+/**
+ * Reference to a field of type 'Role[]'
+ */
+export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role[]'>
+    
+
+
+/**
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -587,6 +844,20 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -698,6 +969,9 @@ export type PrismaClientOptions = ({
   comments?: runtime.SqlCommenterPlugin[]
 }
 export type GlobalOmitConfig = {
+  allowedUser?: Prisma.AllowedUserOmit
+  profile?: Prisma.ProfileOmit
+  video?: Prisma.VideoOmit
   todo?: Prisma.TodoOmit
 }
 
