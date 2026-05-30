@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -8,36 +8,36 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { listCategories } from "@/modules/categories/queries";
 import { getCurrentAccess } from "@/modules/access/queries";
+import { listCategories } from "@/modules/categories/queries";
 import { listVideos } from "@/modules/videos/queries";
 
-import { DashboardShell } from "./dashboard-shell";
-import { SignOutButton } from "./sign-out-button";
+import { SignOutButton } from "../../dashboard/sign-out-button";
+import { UploadShell } from "./upload-shell";
 
-export default async function DashboardPage() {
+export default async function UploadPage() {
   const access = await getCurrentAccess();
 
   if (access.status === "anonymous") {
     redirect("/login");
   }
 
-  if (!access.isActive) {
+  if (!access.isAdmin) {
     return (
       <main className="grid min-h-screen place-items-center bg-background px-4 text-foreground">
         <Card className="w-full max-w-lg">
           <CardHeader>
-            <CardTitle>Access blocked</CardTitle>
+            <CardTitle>Admin only</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-5">
             <p className="text-sm leading-6 text-muted-foreground">
-              This account is not currently whitelisted.
+              This page is for upload and category management.
             </p>
             <div className="flex gap-2">
-              <SignOutButton />
-              <Button asChild variant="outline">
-                <Link href="/">Home</Link>
+              <Button asChild>
+                <Link href="/dashboard">Library</Link>
               </Button>
+              <SignOutButton />
             </div>
           </CardContent>
         </Card>
@@ -47,18 +47,14 @@ export default async function DashboardPage() {
 
   const [categories, videos] = await Promise.all([
     listCategories(),
-    listVideos({ readyOnly: !access.isAdmin, syncWithBunny: true }),
+    listVideos({ syncWithBunny: true }),
   ]);
 
   return (
-    <DashboardShell
+    <UploadShell
       initialCategories={categories}
       initialVideos={videos}
-      isAdmin={access.isAdmin}
-      user={{
-        email: access.user.email,
-        role: access.user.role,
-      }}
+      user={{ email: access.user.email, role: access.user.role }}
     />
   );
 }

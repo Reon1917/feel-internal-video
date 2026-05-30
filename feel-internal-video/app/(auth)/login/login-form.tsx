@@ -2,7 +2,29 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Loader2Icon } from "lucide-react";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
 import { authClient } from "@/lib/auth-client";
 
 type AuthMode = "sign-in" | "sign-up";
@@ -80,108 +102,103 @@ export function LoginForm() {
   }
 
   return (
-    <div className="w-full max-w-md rounded-2xl border border-[#181713]/10 bg-white/75 p-6 shadow-xl shadow-[#181713]/10">
-      <div className="mb-6 flex rounded-full bg-[#efe8d8] p-1">
-        {(["sign-in", "sign-up"] as const).map((option) => (
-          <button
-            className={`flex-1 rounded-full px-4 py-2 text-sm font-semibold transition ${
-              mode === option
-                ? "bg-[#181713] text-white"
-                : "text-[#5c5548] hover:text-[#181713]"
-            }`}
-            key={option}
-            onClick={() => {
-              setError(null);
-              setMode(option);
-            }}
-            type="button"
-          >
-            {option === "sign-in" ? "Sign in" : "Sign up"}
-          </button>
-        ))}
-      </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>{mode === "sign-in" ? "Sign in" : "Create account"}</CardTitle>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-6">
+        <Tabs
+          onValueChange={(value) => {
+            setError(null);
+            setMode(value as AuthMode);
+          }}
+          value={mode}
+        >
+          <TabsList className="w-full" variant="line">
+            <TabsTrigger value="sign-in">Sign in</TabsTrigger>
+            <TabsTrigger value="sign-up">Sign up</TabsTrigger>
+          </TabsList>
+        </Tabs>
 
-      <form className="space-y-4" onSubmit={handleSubmit}>
-        {mode === "sign-up" ? (
-          <label className="block">
-            <span className="text-sm font-semibold text-[#474237]">Name</span>
-            <input
-              className="mt-2 w-full rounded-xl border border-[#181713]/15 bg-white px-4 py-3 text-[#181713] outline-none transition focus:border-[#1d5b4f]"
-              name="name"
-              placeholder="Restaurant team member"
-              required
-              type="text"
-            />
-          </label>
-        ) : null}
+        <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+          <FieldGroup>
+            {mode === "sign-up" ? (
+              <Field>
+                <FieldLabel htmlFor="name">Name</FieldLabel>
+                <Input id="name" name="name" required type="text" />
+              </Field>
+            ) : null}
 
-        <label className="block">
-          <span className="text-sm font-semibold text-[#474237]">Email</span>
-          <input
-            className="mt-2 w-full rounded-xl border border-[#181713]/15 bg-white px-4 py-3 text-[#181713] outline-none transition focus:border-[#1d5b4f]"
-            autoComplete="email"
-            name="email"
-            placeholder="name@gmail.com"
-            required
-            type="email"
-          />
-        </label>
-
-        <label className="block">
-          <span className="text-sm font-semibold text-[#474237]">Password</span>
-          <input
-            className="mt-2 w-full rounded-xl border border-[#181713]/15 bg-white px-4 py-3 text-[#181713] outline-none transition focus:border-[#1d5b4f]"
-            autoComplete={mode === "sign-up" ? "new-password" : "current-password"}
-            minLength={8}
-            name="password"
-            placeholder="At least 8 characters"
-            pattern={mode === "sign-up" ? "^(?=.*[A-Za-z])(?=.*\\d).{8,}$" : undefined}
-            required
-            title="Use at least 8 characters with at least one letter and one number."
-            type="password"
-          />
-        </label>
-
-        {mode === "sign-up" ? (
-          <>
-            <label className="block">
-              <span className="text-sm font-semibold text-[#474237]">
-                Confirm password
-              </span>
-              <input
-                className="mt-2 w-full rounded-xl border border-[#181713]/15 bg-white px-4 py-3 text-[#181713] outline-none transition focus:border-[#1d5b4f]"
-                autoComplete="new-password"
-                minLength={8}
-                name="confirmPassword"
-                placeholder="Enter password again"
+            <Field>
+              <FieldLabel htmlFor="email">Email</FieldLabel>
+              <Input
+                autoComplete="email"
+                id="email"
+                name="email"
+                placeholder="name@gmail.com"
                 required
+                type="email"
+              />
+            </Field>
+
+            <Field>
+              <FieldLabel htmlFor="password">Password</FieldLabel>
+              <Input
+                autoComplete={
+                  mode === "sign-up" ? "new-password" : "current-password"
+                }
+                id="password"
+                minLength={8}
+                name="password"
+                pattern={
+                  mode === "sign-up"
+                    ? "^(?=.*[A-Za-z])(?=.*\\d).{8,}$"
+                    : undefined
+                }
+                required
+                title="Use at least 8 characters with at least one letter and one number."
                 type="password"
               />
-            </label>
-            <p className="rounded-xl bg-[#efe8d8] px-4 py-3 text-sm font-medium leading-6 text-[#5c5548]">
-              Use at least 8 characters with one letter and one number.
-            </p>
-          </>
-        ) : null}
+              {mode === "sign-up" ? (
+                <FieldDescription>
+                  At least 8 characters with one letter and one number.
+                </FieldDescription>
+              ) : null}
+            </Field>
 
-        {error ? (
-          <p className="rounded-xl bg-[#c8412d]/10 px-4 py-3 text-sm font-medium text-[#9f3021]">
-            {error}
-          </p>
-        ) : null}
+            {mode === "sign-up" ? (
+              <Field data-invalid={!!error && error.includes("Passwords")}>
+                <FieldLabel htmlFor="confirmPassword">
+                  Confirm password
+                </FieldLabel>
+                <Input
+                  autoComplete="new-password"
+                  aria-invalid={!!error && error.includes("Passwords")}
+                  id="confirmPassword"
+                  minLength={8}
+                  name="confirmPassword"
+                  required
+                  type="password"
+                />
+                {error?.includes("Passwords") ? (
+                  <FieldError>{error}</FieldError>
+                ) : null}
+              </Field>
+            ) : null}
+          </FieldGroup>
 
-        <button
-          className="w-full rounded-xl bg-[#1d5b4f] px-5 py-3 font-semibold text-white transition hover:bg-[#174a40] disabled:cursor-not-allowed disabled:opacity-60"
-          disabled={isPending}
-          type="submit"
-        >
-          {isPending
-            ? "Working..."
-            : mode === "sign-in"
-              ? "Sign in"
-              : "Create account"}
-        </button>
-      </form>
-    </div>
+          {error && !error.includes("Passwords") ? (
+            <Alert variant="destructive">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          ) : null}
+
+          <Button disabled={isPending} type="submit">
+            {isPending ? <Loader2Icon data-icon="inline-start" /> : null}
+            {mode === "sign-in" ? "Sign in" : "Create account"}
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 }
