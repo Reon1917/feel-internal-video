@@ -394,18 +394,10 @@ Expected environment variables:
 DATABASE_URL=
 BETTER_AUTH_SECRET=
 BETTER_AUTH_URL=
-BUNNY_API_KEY=
+BUNNY_STREAM_API_KEY=
 BUNNY_STREAM_LIBRARY_ID=
-BUNNY_STREAM_HOSTNAME=
-```
-
-Optional depending on implementation:
-
-```txt
-BUNNY_SIGNING_KEY=
-BUNNY_PULL_ZONE_URL=
-BUNNY_STORAGE_ZONE_NAME=
-BUNNY_REGION=
+BUNNY_STREAM_API_BASE_URL=
+BUNNY_STREAM_PLAYER_BASE_URL=
 ```
 
 All Bunny credentials must stay server-side. They should never be exposed directly to the browser.
