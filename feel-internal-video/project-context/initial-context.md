@@ -30,7 +30,7 @@ Users should be able to:
 - Log in only if their email is whitelisted.
 - Browse video categories.
 - Open nested categories like a file system.
-- Watch videos inside the web app using the Bunny video player.
+- Watch videos inside the web app using Bunny Player.
 
 ---
 
@@ -65,7 +65,7 @@ Users should be able to:
   - Video processing/transcoding
   - CDN delivery
   - Stream playback
-  - Bunny video player
+  - Bunny Player
 
 The app does not manually build its own video transcoding pipeline. It only integrates with Bunny APIs and stores Bunny metadata in the database.
 
@@ -88,13 +88,18 @@ The application only needs to:
 1. Store Bunny API credentials securely in environment variables.
 2. Create/upload videos through Bunny API.
 3. Store Bunny video IDs and related metadata in NeonDB.
-4. Show the Bunny video player inside the web app.
+4. Show Bunny Player inside the web app.
 5. Ensure users are authenticated and whitelisted before allowing access to video pages.
 
-Recommended Bunny region setup:
+Bunny Stream implementation rules:
 
-- Main region: Singapore, because the restaurant users are expected to be in Thailand/Bangkok.
-- Additional replication regions are optional and not required for MVP because video access is low frequency.
+- Use `https://video.bunnycdn.com` as the Stream HTTP API base URL.
+- Authenticate Stream API requests with the `AccessKey` header using the per-library Stream API key.
+- Create video records through `POST /library/{libraryId}/videos`.
+- Upload video binaries through `PUT /library/{libraryId}/videos/{videoId}` or the Stream TUS upload flow when needed.
+- Use Bunny Player iframe URLs from `https://player.mediadelivery.net/embed/{libraryId}/{videoId}`.
+- Render Bunny Player only after server-side session, whitelist, and video status checks pass.
+- Video library region and replication should be configured in the Bunny dashboard/library settings. The app should not use a Bunny region environment variable.
 
 Expected video usage:
 
@@ -230,7 +235,7 @@ Video status examples:
 
 ### 5.6 Video Playback
 
-Users watch videos inside the web app using the Bunny video player.
+Users watch videos inside the web app using Bunny Player.
 
 Playback flow:
 
@@ -239,7 +244,7 @@ User opens video page
 → App checks user session
 → App checks whitelist status
 → App checks video exists and is ready
-→ App renders Bunny video player
+→ App renders Bunny Player iframe
 ```
 
 The frontend should not simply hide video pages. Server-side checks are required before rendering protected video content.
@@ -327,6 +332,7 @@ description
 categoryId
 bunnyLibraryId
 bunnyVideoId
+bunnyPlayerUrl: derived from env/library/video IDs, do not persist
 thumbnailUrl
 duration
 status: processing | ready | failed | deleted
@@ -340,6 +346,7 @@ Important rules:
 - Video files are not stored in NeonDB.
 - NeonDB only stores references and metadata.
 - Bunny Stream is the source for actual video assets.
+- Bunny Player iframe URLs should be derived from `BUNNY_STREAM_PLAYER_BASE_URL`, `bunnyLibraryId`, and `bunnyVideoId` after access checks.
 
 ### video_access_logs
 
@@ -440,7 +447,7 @@ All Bunny credentials must stay server-side. They should never be exposed direct
 - Open subcategories.
 - See videos inside category.
 - Search videos by title.
-- Watch videos using Bunny video player.
+- Watch videos using Bunny Player.
 
 ---
 
