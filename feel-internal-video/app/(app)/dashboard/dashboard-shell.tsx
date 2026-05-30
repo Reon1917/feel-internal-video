@@ -1,24 +1,34 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import {
   FolderIcon,
+  HomeIcon,
   PlayIcon,
   SearchIcon,
   SlidersHorizontalIcon,
   UploadIcon,
+  UserIcon,
 } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Empty,
   EmptyDescription,
@@ -35,10 +45,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { authClient } from "@/lib/auth-client";
 import type { CategoryRow } from "@/modules/categories/queries";
 import type { VideoRow } from "@/modules/videos/queries";
-
-import { SignOutButton } from "./sign-out-button";
 
 type DashboardShellProps = {
   initialCategories: CategoryRow[];
@@ -59,6 +68,22 @@ function formatDate(value: string) {
     day: "numeric",
     year: "numeric",
   }).format(new Date(value));
+}
+
+function formatDuration(duration: number | null) {
+  if (!duration || duration < 0) {
+    return "--:--";
+  }
+
+  const hours = Math.floor(duration / 3600);
+  const minutes = Math.floor((duration % 3600) / 60);
+  const seconds = Math.floor(duration % 60);
+
+  if (hours > 0) {
+    return `${hours}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  }
+
+  return `${minutes}:${String(seconds).padStart(2, "0")}`;
 }
 
 export function DashboardShell({
@@ -115,34 +140,26 @@ export function DashboardShell({
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-4 sm:px-6 lg:px-8">
-        <header className="flex flex-col gap-4 border-b border-border pb-4 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex min-w-0 flex-col gap-1">
+      <div className="mx-auto flex w-full max-w-[1760px] flex-col gap-5 px-4 py-4 sm:px-6 lg:px-8">
+        <header className="flex items-center justify-between gap-4 border-b border-border pb-4">
+          <div className="flex min-w-0 items-center gap-3">
             <Link className="text-xs font-semibold uppercase tracking-widest" href="/">
               Feel Internal Video
             </Link>
-            <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-              <span className="truncate">{user.email}</span>
-              <Badge variant="secondary">{user.role}</Badge>
-            </div>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex items-center gap-2">
             {isAdmin ? (
-              <Button asChild>
+              <Button aria-label="Upload video" asChild size="icon" title="Upload">
                 <Link href="/admin/upload">
-                  <UploadIcon data-icon="inline-start" />
-                  Upload
+                  <UploadIcon />
                 </Link>
               </Button>
             ) : null}
-            <Button asChild variant="outline">
-              <Link href="/">Home</Link>
-            </Button>
-            <SignOutButton />
+            <ProfileMenu user={user} />
           </div>
         </header>
 
-        <div className="grid gap-5 lg:grid-cols-[260px_1fr]">
+        <div className="grid gap-6 lg:grid-cols-[240px_1fr] xl:grid-cols-[260px_1fr]">
           <aside className="flex flex-col gap-3 lg:sticky lg:top-4 lg:self-start">
             <Button
               className="justify-start"
@@ -172,11 +189,11 @@ export function DashboardShell({
             </div>
           </aside>
 
-          <section className="flex min-w-0 flex-col gap-5">
+          <section className="flex min-w-0 flex-col gap-6">
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
                 <div className="flex min-w-0 flex-col gap-1">
-                  <h1 className="truncate font-heading text-3xl font-semibold tracking-wider uppercase md:text-4xl">
+                  <h1 className="truncate text-3xl font-semibold tracking-normal md:text-4xl">
                     {selectedCategory?.name ?? "Video Library"}
                   </h1>
                   <p className="text-sm text-muted-foreground">
@@ -186,7 +203,7 @@ export function DashboardShell({
                 </div>
               </div>
 
-              <div className="grid gap-3 md:grid-cols-[1fr_190px]">
+              <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_190px]">
                 <label className="relative block">
                   <span className="sr-only">Search videos</span>
                   <SearchIcon className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -323,10 +340,10 @@ function VideoSection({ title, videos }: { title: string; videos: VideoRow[] }) 
 
 function VideoGrid({ videos }: { videos: VideoRow[] }) {
   return (
-    <div className="grid gap-x-4 gap-y-7 sm:grid-cols-2 xl:grid-cols-3">
+    <div className="grid gap-x-5 gap-y-8 md:grid-cols-2 2xl:grid-cols-3">
       {videos.map((item) => (
         <Card className="shadow-none ring-0" key={item.id} size="sm">
-          <CardContent className="flex flex-col gap-3 px-0">
+          <CardContent className="flex flex-col gap-4 px-0">
             {item.status === "ready" ? (
               <Link
                 className="group relative block aspect-video overflow-hidden bg-muted"
@@ -340,16 +357,13 @@ function VideoGrid({ videos }: { videos: VideoRow[] }) {
               </div>
             )}
             <CardHeader className="px-0">
-              <CardTitle className="line-clamp-2 text-base tracking-normal normal-case">
+              <CardTitle className="line-clamp-2 min-h-14 text-xl leading-7 tracking-normal normal-case">
                 {item.status === "ready" ? (
                   <Link href={`/videos/${item.id}`}>{item.title}</Link>
                 ) : (
                   item.title
                 )}
               </CardTitle>
-              <CardAction>
-                <Badge variant="secondary">{item.categoryName}</Badge>
-              </CardAction>
             </CardHeader>
             <p className="text-xs text-muted-foreground">
               {formatDate(item.createdAt)}
@@ -378,10 +392,12 @@ function VideoThumb({ video }: { video: VideoRow }) {
   return (
     <>
       {video.thumbnailUrl ? (
+        // Bunny thumbnail CDN rejects cache-busting query strings in this setup.
         // eslint-disable-next-line @next/next/no-img-element
         <img
           alt=""
           className="h-full w-full object-cover transition-transform group-hover:scale-[1.02]"
+          loading="lazy"
           src={video.thumbnailUrl}
         />
       ) : (
@@ -389,9 +405,72 @@ function VideoThumb({ video }: { video: VideoRow }) {
           <PlayIcon />
         </div>
       )}
-      <span className="absolute bottom-2 right-2 bg-background px-2 py-1 text-xs font-semibold uppercase tracking-wider">
-        {video.status}
+      <span className="absolute bottom-2 right-2 bg-background px-2 py-1 text-xs font-semibold tabular-nums">
+        {video.status === "ready" ? formatDuration(video.duration) : video.status}
       </span>
     </>
+  );
+}
+
+function ProfileMenu({
+  user,
+}: {
+  user: { email: string; role: "admin" | "user" };
+}) {
+  const router = useRouter();
+  const [isPending, setIsPending] = useState(false);
+  const initial = user.email.charAt(0).toUpperCase();
+
+  async function signOut() {
+    setIsPending(true);
+    await authClient.signOut();
+    router.push("/login");
+    router.refresh();
+  }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button aria-label="Open profile menu" size="icon" variant="outline">
+          <UserIcon />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="min-w-64">
+        <DropdownMenuLabel className="normal-case">
+          <span className="flex items-center gap-3">
+            <span className="flex size-8 items-center justify-center bg-primary text-sm font-semibold text-primary-foreground">
+              {initial}
+            </span>
+            <span className="min-w-0">
+              <span className="block truncate text-sm font-medium normal-case tracking-normal text-foreground">
+                {user.email}
+              </span>
+              <span className="block text-xs uppercase tracking-widest text-muted-foreground">
+                {user.role}
+              </span>
+            </span>
+          </span>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem asChild>
+            <Link href="/">
+              <HomeIcon data-icon="inline-start" />
+              Home
+            </Link>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          disabled={isPending}
+          onSelect={(event) => {
+            event.preventDefault();
+            void signOut();
+          }}
+        >
+          {isPending ? "Signing out..." : "Sign out"}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

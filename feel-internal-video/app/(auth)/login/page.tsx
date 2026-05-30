@@ -10,7 +10,7 @@ export default function LoginPage() {
           <Link className="text-xs font-semibold uppercase tracking-widest" href="/">
             Feel Internal Video
           </Link>
-          <h1 className="font-heading text-5xl font-semibold leading-none tracking-wider uppercase sm:text-6xl">
+          <h1 className="text-5xl font-semibold leading-none tracking-normal sm:text-6xl">
             Whitelist first.
           </h1>
           <p className="max-w-xl text-base leading-7 text-muted-foreground">

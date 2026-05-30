@@ -20,7 +20,7 @@ export default function Home() {
             <p className="text-xs font-semibold uppercase tracking-widest text-primary">
               Private operations library
             </p>
-            <h1 className="font-heading text-5xl font-semibold leading-none tracking-wider uppercase sm:text-6xl lg:text-7xl">
+            <h1 className="max-w-2xl text-5xl font-semibold leading-none tracking-normal sm:text-6xl lg:text-7xl">
               Video SOPs for the team.
             </h1>
             <p className="max-w-xl text-base leading-7 text-muted-foreground">
@@ -50,7 +50,7 @@ export default function Home() {
                 <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
                   {label}
                 </p>
-                <p className="font-heading text-2xl font-semibold uppercase tracking-wider">
+                <p className="text-2xl font-semibold tracking-normal">
                   {value}
                 </p>
               </div>

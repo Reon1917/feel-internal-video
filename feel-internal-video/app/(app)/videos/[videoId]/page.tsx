@@ -67,7 +67,7 @@ export default async function VideoPage({ params }: VideoPageProps) {
 
         <section className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
-            <h1 className="font-heading text-2xl font-semibold tracking-wider uppercase md:text-4xl">
+            <h1 className="text-2xl font-semibold tracking-normal md:text-4xl">
               {video.title}
             </h1>
             {video.description ? (
